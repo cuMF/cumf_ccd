@@ -1,0 +1,12 @@
+6040 3952
+900189
+toyexample_sorted_train_coo.value.bin
+toyexample_sorted_train_coo.row.bin
+toyexample_sorted_train_coo.col.bin
+toyexample_sorted_train_csr.rowptr.bin
+toyexample_sorted_train_csr.colidx.bin
+toyexample_sorted_train_csr.value.bin
+toyexample_sorted_train_csc.colptr.bin
+toyexample_sorted_train_csc.rowidx.bin
+toyexample_sorted_train_csc.value.bin
+100020 test.ratings
