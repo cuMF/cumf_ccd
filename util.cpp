@@ -79,12 +79,12 @@ void load_from_binary(const char* srcdir, SparseMatrix &R, TestData &data) {
 
 	fscanf(fp, "%ld", &nnz);
 	fscanf(fp, "%s", buf);
-	sprintf(binary_filename_val, "%s/%s", srcdir, buf);
-	fscanf(fp, "%s", buf);
-	sprintf(binary_filename_row, "%s/%s", srcdir, buf);
-	fscanf(fp, "%s", buf);
-	sprintf(binary_filename_col, "%s/%s", srcdir, buf);
-	fscanf(fp, "%s", buf);
+	// sprintf(binary_filename_val, "%s/%s", srcdir, buf);
+	// fscanf(fp, "%s", buf);
+	// sprintf(binary_filename_row, "%s/%s", srcdir, buf);
+	// fscanf(fp, "%s", buf);
+	// sprintf(binary_filename_col, "%s/%s", srcdir, buf);
+	// fscanf(fp, "%s", buf);
 	sprintf(binary_filename_rowptr, "%s/%s", srcdir, buf);
 	fscanf(fp, "%s", buf);
 	sprintf(binary_filename_colidx, "%s/%s", srcdir, buf);
@@ -97,8 +97,7 @@ void load_from_binary(const char* srcdir, SparseMatrix &R, TestData &data) {
 	fscanf(fp, "%s", buf);
 	sprintf(binary_filename_cscval, "%s/%s", srcdir, buf);
 
-	R.read_binary_file(m, n, nnz, binary_filename_val, binary_filename_row,
-			binary_filename_col, binary_filename_rowptr, binary_filename_colidx,
+	R.read_binary_file(m, n, nnz, binary_filename_rowptr, binary_filename_colidx,
 			binary_filename_csrval, binary_filename_colptr,
 			binary_filename_rowidx, binary_filename_cscval);
 
@@ -121,7 +120,6 @@ void init_random(MatData &X, long k, long n) {
 
 
 void SparseMatrix::read_binary_file(long rows, long cols, long nnz,
-		std::string fname_data, std::string fname_row, std::string fname_col,
 		std::string fname_csr_row_ptr, std::string fname_csr_col_indx,
 		std::string fname_csr_val, std::string fname_csc_col_ptr,
 		std::string fname_csc_row_indx, std::string fname_csc_val) {
