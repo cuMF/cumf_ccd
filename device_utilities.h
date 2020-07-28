@@ -242,8 +242,8 @@ __global__ void GPU_rmse(int const* __restrict__ test_row,
 	int c = blockIdx.x * blockDim.x + threadIdx.x;
 	if (c < m) {
 		for (int t = 0; t < k; t++) {
-			int i = test_row[c];
-			int j = test_col[c];
+			int i = test_row[c] + 1;
+			int j = test_col[c] + 1;
 			pred_v[c] += W[t * rows + (i - 1)] * H[t * cols + (j - 1)]; //W[i-1][t] * H[j-1][t];
 		}
 		rmse[c] = (pred_v[c] - test_val[c]) * (pred_v[c] - test_val[c]);

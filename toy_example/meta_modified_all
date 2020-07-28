@@ -1,9 +1,12 @@
 6040 3952
 900189
-toyexample_sorted_train_csr.rowptr.bin
-toyexample_sorted_train_csr.colidx.bin
-toyexample_sorted_train_csr.value.bin
-toyexample_sorted_train_csc.colptr.bin
-toyexample_sorted_train_csc.rowidx.bin
-toyexample_sorted_train_csc.value.bin
-100020 test.ratings
+100020
+toyexample_train_csr.rowptr.bin
+toyexample_train_csr.colidx.bin
+toyexample_train_csr.value.bin
+toyexample_train_csc.colptr.bin
+toyexample_train_csc.rowidx.bin
+toyexample_train_csc.value.bin
+toyexample_test_coo.row.bin
+toyexample_test_coo.col.bin
+toyexample_test_coo.data.bin

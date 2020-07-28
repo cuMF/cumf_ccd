@@ -188,11 +188,11 @@ private:
 
 	void read_compressed(std::string fname_coo_row,
 		std::string fname_coo_col, std::string fname_coo_val,
-		std::shared_ptr<unsigned int>&coo_row, std::shared_ptr<unsigned int> &coo_col,
-		std::shared_ptr<DTYPE>& coo_val);
+		std::unique_ptr<unsigned int>&coo_row, std::unique_ptr<unsigned int> &coo_col,
+		std::unique_ptr<DTYPE>& coo_val);
 
-	std::shared_ptr<unsigned int> test_row, test_col;
-	std::shared_ptr<DTYPE> test_val;
+	std::unique_ptr<unsigned int> test_row, test_col;
+	std::unique_ptr<DTYPE> test_val;
 
 };
 
