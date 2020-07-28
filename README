@@ -19,8 +19,8 @@ Details:
 
 line 1 has #rows #cols
 line 2 has nnz in training dataset
-line 3 to 11 has file names
-line 4 has nnz in test dataset and test filename
+line 3 has nnz in test dataset
+line 4 to 12 has file names
 
 
 ## Arguments
