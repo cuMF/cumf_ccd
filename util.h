@@ -86,6 +86,7 @@ using std::ifstream;
 class TestData;
 class SparseMatrix;
 class Options;
+
 using VecData = vector<DTYPE>;
 using MatData = vector<VecData>;
 using VecInt = vector<int>;
@@ -150,26 +151,32 @@ private:
 class TestData {
 
 public:
-	void read(long rows, long cols, long nnz, std::string filename) {
-		this->rows_ = rows;
-		this->cols_ = cols;
-		this->nnz_ = nnz;
+	long rows_ { 0 }, cols_ { 0 }, nnz_ { 0 };
 
-		test_row = std::unique_ptr<int[]>(new int[nnz]);
-		test_col = std::unique_ptr<int[]>(new int[nnz]);
-		test_val = std::unique_ptr<DTYPE[]>(new DTYPE[nnz]);
+	void read_binary_file(long rows, long cols, long nnz,
+		std::string fname_coo_row, std::string fname_coo_col,
+		std::string fname_coo_val);
+	
+	// void read(long rows, long cols, long nnz, std::string filename) {
+	// 	this->rows_ = rows;
+	// 	this->cols_ = cols;
+	// 	this->nnz_ = nnz;
 
-		ifstream fp(filename);
-		for (long idx = 0; idx < nnz; ++idx) {
-			fp >> test_row[idx] >> test_col[idx] >> test_val[idx];
-		}
-	}
+	// 	test_row = std::unique_ptr<unsigned int[]>(new unsigned int[nnz]);
+	// 	test_col = std::unique_ptr<unsigned int[]>(new unsigned int[nnz]);
+	// 	test_val = std::unique_ptr<DTYPE[]>(new DTYPE[nnz]);
 
-	int* getTestCol() const {
+	// 	ifstream fp(filename);
+	// 	for (long idx = 0; idx < nnz; ++idx) {
+	// 		fp >> test_row[idx] >> test_col[idx] >> test_val[idx];
+	// 	}
+	// }
+
+	unsigned int* getTestCol() const {
 		return test_col.get();
 	}
 
-	int* getTestRow() const {
+	unsigned int* getTestRow() const {
 		return test_row.get();
 	}
 
@@ -177,12 +184,16 @@ public:
 		return test_val.get();
 	}
 
-	long rows_ { 0 }, cols_ { 0 }, nnz_ { 0 };
-
 private:
 
-	std::unique_ptr<int[]> test_row, test_col;
-	std::unique_ptr<DTYPE[]> test_val;
+	void read_compressed(std::string fname_coo_row,
+		std::string fname_coo_col, std::string fname_coo_val,
+		std::shared_ptr<unsigned int>&coo_row, std::shared_ptr<unsigned int> &coo_col,
+		std::shared_ptr<DTYPE>& coo_val);
+
+	std::shared_ptr<unsigned int> test_row, test_col;
+	std::shared_ptr<DTYPE> test_val;
+
 };
 
 class Options {

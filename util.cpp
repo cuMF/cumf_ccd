@@ -66,25 +66,24 @@
 // load utility
 void load_from_binary(const char* srcdir, SparseMatrix &R, TestData &data) {
 	printf("Loading from binary file...\n");
-	char filename[1024], buf[1024], binary_filename_val[1024],
-			binary_filename_row[1024], binary_filename_col[1024];
+	char filename[1024], buf[1024];
+
+	char binary_test_coo_filename_row[1024],
+			binary_test_coo_filename_col[1024], binary_test_coo_filename_val[1024],
+			demo[1024];
 	char binary_filename_rowptr[1024], binary_filename_colidx[1024],
 			binary_filename_csrval[1024];
 	char binary_filename_colptr[1024], binary_filename_rowidx[1024],
 			binary_filename_cscval[1024];
 	sprintf(filename, "%s/meta_modified_all", srcdir);
 	FILE *fp = fopen(filename, "r");
-	long m, n, nnz;
+	long m, n, nnz, test_nnz;
 	fscanf(fp, "%ld %ld", &m, &n);
-
 	fscanf(fp, "%ld", &nnz);
+	fscanf(fp, "%ld", &test_nnz);
+
+	// read names of train datasets
 	fscanf(fp, "%s", buf);
-	// sprintf(binary_filename_val, "%s/%s", srcdir, buf);
-	// fscanf(fp, "%s", buf);
-	// sprintf(binary_filename_row, "%s/%s", srcdir, buf);
-	// fscanf(fp, "%s", buf);
-	// sprintf(binary_filename_col, "%s/%s", srcdir, buf);
-	// fscanf(fp, "%s", buf);
 	sprintf(binary_filename_rowptr, "%s/%s", srcdir, buf);
 	fscanf(fp, "%s", buf);
 	sprintf(binary_filename_colidx, "%s/%s", srcdir, buf);
@@ -98,13 +97,27 @@ void load_from_binary(const char* srcdir, SparseMatrix &R, TestData &data) {
 	sprintf(binary_filename_cscval, "%s/%s", srcdir, buf);
 
 	R.read_binary_file(m, n, nnz, binary_filename_rowptr, binary_filename_colidx,
-			binary_filename_csrval, binary_filename_colptr,
-			binary_filename_rowidx, binary_filename_cscval);
+		binary_filename_csrval, binary_filename_colptr,
+		binary_filename_rowidx, binary_filename_cscval);
 
-	if (fscanf(fp, "%ld %s", &nnz, buf) != EOF) {
+	// read names of test datasets
+	fscanf(fp, "%s", buf);
+	sprintf(binary_test_coo_filename_row, "%s/%s", srcdir, buf);
+	fscanf(fp, "%s", buf);
+	sprintf(binary_test_coo_filename_col, "%s/%s", srcdir, buf);
+	fscanf(fp, "%s", buf);
+	sprintf(binary_test_coo_filename_val, "%s/%s", srcdir, buf);
+	// fscanf(fp, "%s", buf);
+	// sprintf(demo, "%s/%s", srcdir, buf);
+
+
+	if (fscanf(fp, "%s", buf) != EOF) {
 		sprintf(filename, "%s/%s", srcdir, buf);
-		data.read(m, n, nnz, filename);
+		// data.read(m, n, test_nnz, filename);
 	}
+
+	data.read_binary_file(m, n, nnz, binary_test_coo_filename_row, binary_test_coo_filename_col,
+		binary_test_coo_filename_val);
 	fclose(fp);
 
 	return;
@@ -192,4 +205,67 @@ SparseMatrix SparseMatrix::get_shallow_transpose() {
 	return shallow_transpose;
 }
 
+void TestData::read_compressed(std::string fname_coo_row,
+	std::string fname_coo_col, std::string fname_coo_val,
+	std::shared_ptr<unsigned int>&coo_row, std::shared_ptr<unsigned int> &coo_col,
+	std::shared_ptr<DTYPE>& coo_val) {
+
+	test_row = std::shared_ptr<unsigned int>(new unsigned int[this->nnz_],
+			std::default_delete<unsigned int[]>());
+	test_col = std::shared_ptr<unsigned int>(new unsigned int[this->nnz_],
+			std::default_delete<unsigned int[]>());
+	test_val = std::shared_ptr<DTYPE>(new DTYPE[this->nnz_],
+			std::default_delete<DTYPE[]>());
+
+	// SparseMatrix get_shallow_transpose();
+	
+	std::ifstream f_row(fname_coo_row, std::ios::binary);
+	std::ifstream f_col(fname_coo_col, std::ios::binary);
+	std::ifstream f_val(fname_coo_val, std::ios::binary);
+
+	for (std::size_t i = 0; i < this->nnz_; i++) {
+		f_row.read((char*) &test_row.get()[i], sizeof(unsigned int));
+		f_col.read((char*) &test_col.get()[i], sizeof(unsigned int));
+		f_val.read((char *) &test_val.get()[i], sizeof(float));
+	}
+	std::cout << test_row.get()[1000] << std::endl;
+}
+
+void TestData::read_binary_file(long rows, long cols, long nnz,
+		std::string fname_coo_row, std::string fname_coo_col,
+		std::string fname_coo_val) {
+	this->rows_ = rows;
+	this->cols_ = cols;
+	this->nnz_ = nnz;
+
+	/// read csr
+	this->read_compressed(fname_coo_row, fname_coo_col, fname_coo_val,
+			this->test_row, this->test_col, this->test_val);
+
+}
+
+
+
+// void TestData::read_compressed(std::string fname_coo_row,
+// 		std::string fname_coo_col, std::string fname_coo_val,
+// 		std::shared_ptr<unsigned int>&coo_row, std::shared_ptr<unsigned int> &coo_col,
+// 		std::shared_ptr<DTYPE>& coo_val) {
+
+// 	coo_row = std::shared_ptr<unsigned int>(new unsigned int[this->nnz],
+// 			std::default_delete<int[]>());
+// 	coo_col = std::shared_ptr<unsigned int>(new unsigned int[this->nnz_],
+// 			std::default_delete<unsigned int[]>());
+// 	coo_val = std::shared_ptr<DTYPE>(new DTYPE[this->nnz_],
+// 			std::default_delete<DTYPE[]>());
+	
+// 	std::ifstream f_row(fname_coo_row, std::ios::binary);
+// 	std::ifstream f_col(fname_coo_col, std::ios::binary);
+// 	std::ifstream f_val(fname_coo_val, std::ios::binary);
+
+// 	for (std::size_t i = 0; i < this->nnz_; i++) {
+// 		f_row.read((char*) &coo_row.get()[i], sizeof(unsigned int));
+// 		f_col.read((char*) &coo_col.get()[i], sizeof(unsigned int));
+// 		f_val.read((char *) &coo_val.get()[i], sizeof(float));
+// 	}
+// }
 
