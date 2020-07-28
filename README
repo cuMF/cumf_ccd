@@ -1,3 +1,4 @@
+
 ## How to build  
 
 make clean && make
@@ -24,7 +25,7 @@ line 4 has nnz in test dataset and test filename
 
 ## Arguments
 
-    $ ./ccdp_gpu [options] [input file directoty containing meta_modified_all] [test file path]
+    $ ./ccdp_gpu [options] [input file directoty containing meta_modified_all] 
 
     options:
 
