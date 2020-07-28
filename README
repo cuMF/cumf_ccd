@@ -1,16 +1,16 @@
-## How to build
+## How to build  
 
 make clean && make
 
-## How to run
+## How to run  
 
-$./ccdp_gpu toy_example toy_example/test.ratings
+$./ccdp_gpu toy_example 
 (more examples below)
 
 ##Input format
 
 The input should be in binary format (See toy_example directory
-for details). 
+for details). An example to create binaries can be found in https://github.com/cuMF/cumf_als/blob/master/data/ml10M/prepare_ml10M_data.py
 
 "meta_modified_all" has the name of the input files.
 
@@ -38,7 +38,7 @@ line 4 has nnz in test dataset and test filename
 
 ## Examples:
 To run Netflix:
-./ccdp_gpu -T 1 -a 100000 -b 100000 -l .058 -k 40 -t 10 ../Netflix ../Netflix/netflix_mme_wo_header
+./ccdp_gpu -T 1 -a 100000 -b 100000 -l .058 -k 40 -t 10 ../Netflix 
 
 To run Yahoo Music:
-$./ccdp_gpu -T 1 -a 100000 -b 100000 -l 1.2 -k 40 -t 10 ../Yahoo_music ../Yahoo_music/test.txt
+$./ccdp_gpu -T 1 -a 100000 -b 100000 -l 1.2 -k 40 -t 10 ../Yahoo_music 

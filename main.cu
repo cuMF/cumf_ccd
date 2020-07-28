@@ -121,7 +121,7 @@ Options parse_cmd_options(int argc, char **argv, char *train_file_name,
 		print_help_and_exit();
 
 	strcpy(train_file_name, argv[i]);
-	strcpy(test_file_name, argv[i + 1]);
+	// strcpy(test_file_name, argv[i + 1]);
 	return param;
 }
 
